@@ -15,17 +15,6 @@
                 background-color: #eee !important;
                 color: black !important;
             }
-            .btn {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 10px 20px; /* Adjust padding as needed */
-                border-radius: 5px; /* Optional: adds rounded corners */
-                background-color: #007bff; /* Blue color similar to Bootstrap primary */
-                color: white; /* White text color */
-                font-size: 16px; /* Adjust font size as needed */
-                cursor: pointer;
-            }
         </style>
     </head>
     <body style="width: 100vw; max-width: 600px; min-height: 100vh; margin: auto;background-color: #444;">
@@ -84,9 +73,11 @@
                     <img class="animal-picker" src="img/snow_fox_sit.webp" id="1" width="100px">
                     <img class="animal-picker" src="img/slugcat_arti.webp" id="2" width="100px">
                     <img class="animal-picker" src="img/slugcat_saint.webp" id="3" width="100px">
-                    <input type="file" id="upload-animal" accept="image/*" style="display:none;" onchange="handleUpload(this.files, 'animal')">
-                    <label for="upload-animal" class="btn btn-primary">Upload Animal</label>
-                    <input type="hidden" id="uploaded-animal-url">
+                    <div class="d-flex justify-content-center" style="flex-basis: 100%;"> 
+                        <input type="file" id="upload-animal" accept="image/*" style="display:none;" onchange="handleUpload(this.files, 'animal')">
+                        <label for="upload-animal" class="btn btn-primary">Upload Animal</label>
+                        <input type="hidden" id="uploaded-animal-url">
+                    </div>
                 </div>
             </div>
             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
@@ -97,10 +88,12 @@
                     <img class="flag-picker p-2" src="img/flag_bi.png" id="2" width="100px">
                     <img class="flag-picker p-2" src="img/flag_trans.png" id="3" width="100px">
                     <img class="flag-picker p-2" src="img/flag_ace.png" id="4" width="100px">
-                    <img class="flag-picker p-2" src="img/flag_gay.png" id="5" width="100px">
-                    <input type="file" id="upload-flag" accept="image/*" style="display:none;" onchange="handleUpload(this.files, 'flag')">
-                    <label for="upload-flag" class="btn btn-primary">Upload Flag</label>
-                    <input type="hidden" id="uploaded-flag-url">
+                    <img class="flag-picker p-2" src="img/flag_gay.jpeg" id="5" width="100px">
+                    <div class="d-flex justify-content-center" style="flex-basis: 100%;"> 
+                        <input type="file" id="upload-flag" accept="image/*" style="display:none;" onchange="handleUpload(this.files, 'flag')">
+                        <label for="upload-flag" class="btn btn-primary">Upload Flag</label>
+                        <input type="hidden" id="uploaded-flag-url">
+                    </div>
                 </div>
             </div>
           </div>
