@@ -15,6 +15,17 @@
                 background-color: #eee !important;
                 color: black !important;
             }
+            .btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 10px 20px; /* Adjust padding as needed */
+                border-radius: 5px; /* Optional: adds rounded corners */
+                background-color: #007bff; /* Blue color similar to Bootstrap primary */
+                color: white; /* White text color */
+                font-size: 16px; /* Adjust font size as needed */
+                cursor: pointer;
+            }
         </style>
     </head>
     <body style="width: 100vw; max-width: 600px; min-height: 100vh; margin: auto;background-color: #444;">
@@ -73,6 +84,9 @@
                     <img class="animal-picker" src="img/snow_fox_sit.webp" id="1" width="100px">
                     <img class="animal-picker" src="img/slugcat_arti.webp" id="2" width="100px">
                     <img class="animal-picker" src="img/slugcat_saint.webp" id="3" width="100px">
+                    <input type="file" id="upload-animal" accept="image/*" style="display:none;" onchange="handleUpload(this.files, 'animal')">
+                    <label for="upload-animal" class="btn btn-primary">Upload Animal</label>
+                    <input type="hidden" id="uploaded-animal-url">
                 </div>
             </div>
             <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
@@ -83,6 +97,9 @@
                     <img class="flag-picker p-2" src="img/flag_bi.png" id="2" width="100px">
                     <img class="flag-picker p-2" src="img/flag_trans.png" id="3" width="100px">
                     <img class="flag-picker p-2" src="img/flag_ace.png" id="4" width="100px">
+                    <input type="file" id="upload-flag" accept="image/*" style="display:none;" onchange="handleUpload(this.files, 'flag')">
+                    <label for="upload-flag" class="btn btn-primary">Upload Flag</label>
+                    <input type="hidden" id="uploaded-flag-url">
                 </div>
             </div>
           </div>
@@ -115,18 +132,38 @@
             // Animal, Flag
             let selected = [0,0]
 
-            function draw() {
-                let ctx = document.getElementById('canvas').getContext('2d')
-                let img_animal = new Image()
-                let img_flag = new Image()
-                img_flag.onload = function() {
-                    ctx.drawImage(img_flag, 0, 0, 340, 340,0,0,340,340)
-                    img_animal.onload = function() {
-                        ctx.drawImage(img_animal, 0, 0, 340, 340,0,0,340,340)
-                    }
-                    img_animal.src = animal[selected[0]].url
+            function handleUpload(files, type) {
+                if (files.length > 0) {
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        if (type === 'animal') {
+                            document.getElementById('uploaded-animal-url').value = e.target.result;
+                            selected[0] = -1; // -1 representing a custom image
+                            draw();
+                        } else if (type === 'flag') {
+                            document.getElementById('uploaded-flag-url').value = e.target.result;
+                            selected[1] = -1; // -1 representing a custom image
+                            draw();
+                        }
+                    };
+                    reader.readAsDataURL(files[0]);
                 }
-                img_flag.src = flag[selected[1]].url
+            }
+
+            function draw() {
+                let ctx = document.getElementById('canvas').getContext('2d');
+                let img_animal = new Image();
+                let img_flag = new Image();
+
+                img_flag.onload = function() {
+                    ctx.drawImage(img_flag, 0, 0, 340, 340);
+                    img_animal.onload = function() {
+                        ctx.drawImage(img_animal, 0, 0, 340, 340);
+                    }
+                    img_animal.src = selected[0]!== -1? animal[selected[0]].url : document.getElementById('uploaded-animal-url').value;
+                };
+
+                img_flag.src = selected[1]!== -1? flag[selected[1]].url : document.getElementById('uploaded-flag-url').value;
             }
 
             // Clicks
@@ -141,9 +178,17 @@
             })
 
             $('#download').on('click', function(event) {
-                var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream")
-                window.location.href=image
-            })
+                var canvas = document.getElementById('canvas');
+                var image = canvas.toDataURL("image/png");
+                var tempLink = document.createElement('a');
+                tempLink.style.display = 'none';
+                tempLink.href = image;
+
+                tempLink.download = 'pride_pic.png';
+                document.body.appendChild(tempLink);
+                tempLink.click();
+                document.body.removeChild(tempLink);
+            });
 
 
             draw()
